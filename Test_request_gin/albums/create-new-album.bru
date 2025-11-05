@@ -7,17 +7,21 @@ meta {
 post {
   url: {{baseUrl}}/albums
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 headers {
   Content-Type: application/json
   Accept: application/json
+  Authorization: Bearer {{authToken}}
 }
 
 body:json {
   {
-    "id": "5",
     "title": "Kind of Blue",
     "artist": "Miles Davis",
     "price": 45.99
@@ -39,7 +43,8 @@ tests {
   
   test("Created album has correct data", function() {
     const album = res.getBody();
-    expect(album.id).to.equal("5");
+    expect(album.id).to.exist;
+    expect(album.id).to.be.a('number');
     expect(album.title).to.equal("Kind of Blue");
     expect(album.artist).to.equal("Miles Davis");
     expect(album.price).to.equal(45.99);

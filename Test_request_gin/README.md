@@ -1,121 +1,169 @@
-# Tests API avec Bruno
+# API Tests with Bruno
 
-Ce dossier contient les tests d'API pour le projet Go avec Gin, organisés pour être utilisés avec l'outil Bruno.
+This folder contains API tests for the Go with Gin project, organized to be used with the Bruno tool.
 
-## Structure des tests
+## Test Structure
 
 ```
 Test_request_gin/
-├── bruno.json                    # Configuration de la collection
-├── environments/                 # Variables d'environnement
-│   ├── local.bru                # Environnement local
-│   └── production.bru           # Environnement de production
-└── albums/                      # Tests pour les endpoints albums
+├── bruno.json                    # Collection configuration
+├── environments/                 # Environment variables
+│   ├── local.bru                # Local environment
+│   └── production.bru           # Production environment
+├── auth/                        # Tests for authentication endpoints
+│   ├── register.bru             # POST /register
+│   ├── login.bru                # POST /login
+│   ├── login-invalid-credentials.bru # 401 error test
+│   ├── get-profile.bru          # GET /profile
+│   └── get-profile-unauthorized.bru # 401 error test
+└── albums/                      # Tests for album endpoints
     ├── get-all-albums.bru       # GET /albums
     ├── get-album-by-id.bru      # GET /albums/:id
     ├── create-new-album.bru     # POST /albums
-    ├── get-album-not-found.bru  # Test d'erreur 404
-    ├── create-album-invalid-data.bru # Test de validation
-    └── verify-album-created.bru # Vérification après création
+    └── get-albums-unauthorized.bru # 401 error test
 ```
 
-## Prérequis
+## Prerequisites
 
-1. **Bruno** : Installez Bruno depuis [bruno.app](https://www.bruno.app/)
-2. **Serveur API** : Assurez-vous que votre serveur Go est démarré sur `localhost:8082`
+1. **Bruno** : Install Bruno from [bruno.app](https://www.bruno.app/)
+2. **API Server** : Make sure your Go server is running on `localhost:8082`
 
-## Utilisation
+## Usage
 
-### 1. Ouvrir la collection dans Bruno
+### 1. Open Collection in Bruno
 
-1. Lancez Bruno
-2. Cliquez sur "Open Collection"
-3. Sélectionnez le dossier `Test_request_gin`
+1. Launch Bruno
+2. Click on "Open Collection"
+3. Select the `Test_request_gin` folder
 
-### 2. Configurer l'environnement
+### 2. Configure Environment
 
-1. Dans Bruno, sélectionnez l'environnement "local" dans le menu déroulant
-2. Vérifiez que `baseUrl` est défini sur `http://localhost:8082`
+1. In Bruno, select the "local" environment from the dropdown menu
+2. Verify that `baseUrl` is set to `http://localhost:8082`
 
-### 3. Exécuter les tests
+### 3. Authentication (Important)
 
-#### Tests individuels
-- Cliquez sur n'importe quel fichier `.bru` dans l'interface
-- Cliquez sur "Send" pour exécuter la requête
-- Consultez les résultats des tests dans l'onglet "Tests"
+**IMPORTANT** : Album routes now require JWT authentication. 
 
-#### Tests en lot
-- Sélectionnez le dossier "albums"
-- Cliquez sur "Run Collection" pour exécuter tous les tests
+1. First run the `auth/register.bru` or `auth/login.bru` test
+2. The JWT token will be automatically saved in the `authToken` environment variable
+3. Album tests will automatically use this token
 
-## Description des tests
+### 4. Run Tests
 
-### GET /albums
-- **Fichier** : `get-all-albums.bru`
-- **Objectif** : Récupérer tous les albums
-- **Tests** : Vérification du statut 200, structure de réponse, données requises
+#### Individual Tests
+- Click on any `.bru` file in the interface
+- Click "Send" to execute the request
+- Check test results in the "Tests" tab
 
-### GET /albums/:id
-- **Fichier** : `get-album-by-id.bru`
-- **Objectif** : Récupérer un album spécifique
-- **Tests** : Vérification du statut 200, données correctes de l'album
+#### Batch Tests
+- Select the "auth" folder to test authentication
+- Select the "albums" folder to test albums
+- Click "Run Collection" to run all tests in the folder
 
-### POST /albums
-- **Fichier** : `create-new-album.bru`
-- **Objectif** : Créer un nouvel album
-- **Tests** : Vérification du statut 201, données de l'album créé
+**Note** : To test albums, make sure you have run `register.bru` or `login.bru` at least once to obtain a token.
 
-### Gestion d'erreurs
-- **Fichier** : `get-album-not-found.bru`
-- **Objectif** : Tester la gestion d'erreur 404
-- **Tests** : Vérification du statut 404, message d'erreur
+## Test Description
 
-### Validation des données
-- **Fichier** : `create-album-invalid-data.bru`
-- **Objectif** : Tester la validation des données invalides
-- **Tests** : Vérification de la gestion des erreurs de validation
+### Authentication
 
-### Vérification post-création
-- **Fichier** : `verify-album-created.bru`
-- **Objectif** : Vérifier qu'un album a été correctement ajouté
-- **Tests** : Vérification de la présence de l'album dans la liste
+#### POST /register
+- **File** : `auth/register.bru`
+- **Purpose** : Create a new user account
+- **Tests** : Status 201 verification, token and user data presence
+- **Saved Variables** : `authToken`, `userId`
 
-## Variables d'environnement
+#### POST /login
+- **File** : `auth/login.bru`
+- **Purpose** : Login with an existing account
+- **Tests** : Status 200 verification, token and user data presence
+- **Saved Variables** : `authToken`, `userId`
+
+#### POST /login (invalid credentials)
+- **File** : `auth/login-invalid-credentials.bru`
+- **Purpose** : Test error handling with invalid credentials
+- **Tests** : Status 401 verification, error message
+
+#### GET /profile
+- **File** : `auth/get-profile.bru`
+- **Purpose** : Get the logged-in user's profile
+- **Tests** : Status 200 verification, user profile data
+- **Authentication Required** : Yes (Bearer token)
+
+#### GET /profile (unauthorized)
+- **File** : `auth/get-profile-unauthorized.bru`
+- **Purpose** : Test access without authentication
+- **Tests** : Status 401 verification, error message
+
+### Albums
+
+#### GET /albums
+- **File** : `albums/get-all-albums.bru`
+- **Purpose** : Get all albums
+- **Tests** : Status 200 verification, response structure, required data
+- **Authentication Required** : Yes (Bearer token)
+
+#### GET /albums/:id
+- **File** : `albums/get-album-by-id.bru`
+- **Purpose** : Get a specific album
+- **Tests** : Status 200 verification, correct album data
+- **Authentication Required** : Yes (Bearer token)
+
+#### POST /albums
+- **File** : `albums/create-new-album.bru`
+- **Purpose** : Create a new album
+- **Tests** : Status 201 verification, created album data
+- **Authentication Required** : Yes (Bearer token)
+
+#### GET /albums (unauthorized)
+- **File** : `albums/get-albums-unauthorized.bru`
+- **Purpose** : Test access without authentication
+- **Tests** : Status 401 verification, error message
+
+## Environment Variables
 
 ### Local
 - `baseUrl` : http://localhost:8082
 - `timeout` : 5000ms
+- `authToken` : (automatically filled after register/login)
 
 ### Production
 - `baseUrl` : https://your-api-domain.com
 - `timeout` : 10000ms
+- `authToken` : (automatically filled after register/login)
 
-## Intégration CI/CD
+**Note** : The `authToken` variable is automatically filled when running `register.bru` or `login.bru` tests thanks to the `vars:post-response` section in these files.
 
-Bruno peut être intégré dans vos pipelines CI/CD :
+## CI/CD Integration
+
+Bruno can be integrated into your CI/CD pipelines:
 
 ```bash
-# Exécuter tous les tests
+# Run all tests
 bruno test Test_request_gin
 
-# Exécuter avec un environnement spécifique
+# Run with a specific environment
 bruno test Test_request_gin --env local
 
-# Exécuter un test spécifique
+# Run a specific test
 bruno test Test_request_gin/albums/get-all-albums.bru
 ```
 
-## Personnalisation
+## Customization
 
-Pour ajouter de nouveaux tests :
+To add new tests:
 
-1. Créez un nouveau fichier `.bru` dans le dossier approprié
-2. Suivez la structure des fichiers existants
-3. Ajoutez vos tests dans la section `tests`
-4. Utilisez les variables d'environnement définies
+1. Create a new `.bru` file in the appropriate folder
+2. Follow the structure of existing files
+3. Add your tests in the `tests` section
+4. Use the defined environment variables
 
-## Notes importantes
+## Important Notes
 
-- Assurez-vous que le serveur API est démarré avant d'exécuter les tests
-- Les tests de création d'albums peuvent affecter l'état des données
-- Pour les tests de production, mettez à jour l'URL dans `environments/production.bru`
+- Make sure the API server is running before executing tests
+- **Authentication Required** : All album routes now require a JWT token
+- Run `auth/register.bru` or `auth/login.bru` first to obtain a token before testing albums
+- The token is automatically saved in the `authToken` environment variable
+- Album creation tests may affect data state
+- For production tests, update the URL in `environments/production.bru`
+- JWT tokens are valid for 24 hours

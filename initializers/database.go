@@ -22,7 +22,7 @@ func ConnectDB() {
 }
 
 func SyncDatabase() {
-	err := DB.AutoMigrate(&models.Album{})
+	err := DB.AutoMigrate(&models.Album{}, &models.User{})
 	if err != nil {
 		log.Fatal("Erreur lors de la migration de la base de données")
 	}

@@ -7,11 +7,16 @@ meta {
 get {
   url: {{baseUrl}}/albums/{{albumId}}
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 headers {
   Accept: application/json
+  Authorization: Bearer {{authToken}}
 }
 
 vars:pre-request {

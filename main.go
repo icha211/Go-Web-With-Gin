@@ -3,6 +3,7 @@ package main
 import (
 	"example/web-service-gin/controllers"
 	"example/web-service-gin/initializers"
+	"example/web-service-gin/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +17,19 @@ func init() {
 func main() {
 	router := gin.Default()
 
-	router.GET("/albums", controllers.GetAlbums)
-	router.GET("/albums/:id", controllers.GetAlbumByID)
-	router.POST("/albums", controllers.PostAlbums)
+	// Routes publiques
+	router.POST("/register", controllers.Register)
+	router.POST("/login", controllers.Login)
+
+	// Routes protégées par authentification
+	protected := router.Group("/")
+	protected.Use(middleware.RequireAuth())
+	{
+		protected.GET("/albums", controllers.GetAlbums)
+		protected.GET("/albums/:id", controllers.GetAlbumByID)
+		protected.POST("/albums", controllers.PostAlbums)
+		protected.GET("/profile", controllers.GetProfile)
+	}
 
 	router.Run("localhost:8082")
 }
