@@ -20,7 +20,11 @@ const AlbumDetail = () => {
       setAlbum(data)
       setError('')
     } catch (err) {
+<<<<<<< HEAD
       setError('Error loading album')
+=======
+      setError(`Error loading the album ${id}: ${err.message}`)
+>>>>>>> 73d7158 (role-based authentication)
       console.error(err)
     } finally {
       setLoading(false)
@@ -37,7 +41,11 @@ const AlbumDetail = () => {
         <div className="card">
           <div className="error">{error || 'Album not found'}</div>
           <Link to="/albums" className="btn btn-secondary" style={{ marginTop: '20px', display: 'inline-block' }}>
+<<<<<<< HEAD
             Back to list
+=======
+            Return to list
+>>>>>>> 73d7158 (role-based authentication)
           </Link>
         </div>
       </div>
@@ -47,7 +55,11 @@ const AlbumDetail = () => {
   return (
     <div className="container">
       <Link to="/albums" className="btn btn-secondary" style={{ marginBottom: '20px', display: 'inline-block', textDecoration: 'none' }}>
+<<<<<<< HEAD
         ← Back to list
+=======
+        ← Return to list
+>>>>>>> 73d7158 (role-based authentication)
       </Link>
 
       <div className="card">

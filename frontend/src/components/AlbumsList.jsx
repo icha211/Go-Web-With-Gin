@@ -18,7 +18,11 @@ const AlbumsList = () => {
       setAlbums(data)
       setError('')
     } catch (err) {
+<<<<<<< HEAD
       setError('Error loading albums')
+=======
+      setError(`Error loading albums: ${err.message}`)
+>>>>>>> 73d7158 (role-based authentication)
       console.error(err)
     } finally {
       setLoading(false)
@@ -77,7 +81,11 @@ const AlbumsList = () => {
                 className="btn btn-secondary"
                 style={{ marginTop: '15px', display: 'inline-block', textDecoration: 'none' }}
               >
+<<<<<<< HEAD
                 View details
+=======
+                View Details
+>>>>>>> 73d7158 (role-based authentication)
               </Link>
             </div>
           ))}

@@ -12,4 +12,3 @@ func LoadEnvVariables() {
 		log.Println("No .env file found, using default values")
 	}
 }
-
