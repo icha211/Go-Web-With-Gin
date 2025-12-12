@@ -17,11 +17,7 @@ const Register = () => {
     setError('')
 
     if (password.length < 6) {
-<<<<<<< HEAD
       setError('Password must contain at least 6 characters')
-=======
-      setError('The password must contain at least 6 characters')
->>>>>>> 73d7158 (role-based authentication)
       return
     }
 
@@ -43,11 +39,7 @@ const Register = () => {
     <div className="container">
       <div style={{ maxWidth: '400px', margin: '50px auto' }}>
         <div className="card">
-<<<<<<< HEAD
           <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Sign Up</h2>
-=======
-          <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Register</h2>
->>>>>>> 73d7158 (role-based authentication)
           
           <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -102,11 +94,7 @@ const Register = () => {
               style={{ width: '100%', marginTop: '10px' }}
               disabled={loading}
             >
-<<<<<<< HEAD
               {loading ? 'Signing up...' : "Sign up"}
-=======
-              {loading ? ' Registering...' : "Register"}
->>>>>>> 73d7158 (role-based authentication)
             </button>
           </form>
 

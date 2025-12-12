@@ -70,15 +70,9 @@ const Login = () => {
           </form>
 
           <p style={{ marginTop: '20px', textAlign: 'center' }}>
-<<<<<<< HEAD
             Don't have an account?{' '}
             <Link to="/register" style={{ color: '#007bff' }}>
               Sign up
-=======
-            Don't have an account yet?{' '}
-            <Link to="/register" style={{ color: '#007bff' }}>
-              Register
->>>>>>> 73d7158 (role-based authentication)
             </Link>
           </p>
         </div>

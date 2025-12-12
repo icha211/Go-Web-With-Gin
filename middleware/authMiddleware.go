@@ -13,11 +13,7 @@ func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-<<<<<<< HEAD
 			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "Authentication token missing"})
-=======
-			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "Missing authentication token"})
->>>>>>> 73d7158 (role-based authentication)
 			c.Abort()
 			return
 		}

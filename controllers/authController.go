@@ -29,25 +29,15 @@ func Register(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	var existingUser models.User
 	if err := initializers.DB.Where("email = ?", body.Email).First(&existingUser).Error; err == nil {
 		c.IndentedJSON(http.StatusConflict, gin.H{"error": "This email is already in use"})
 		return
-=======
-	role := "user"
-	if body.Role == "artist" {
-		role = "artist"
->>>>>>> 73d7158 (role-based authentication)
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	if err != nil {
-<<<<<<< HEAD
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error hashing password"})
-=======
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not hash password"})
->>>>>>> 73d7158 (role-based authentication)
 		return
 	}
 
@@ -63,7 +53,6 @@ func Register(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	token, err := utils.GenerateToken(user.ID, user.Email)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
@@ -78,9 +67,6 @@ func Register(c *gin.Context) {
 		},
 		"token": token,
 	})
-=======
-	c.JSON(http.StatusCreated, gin.H{"message": "created"})
->>>>>>> 73d7158 (role-based authentication)
 }
 
 func Login(c *gin.Context) {
@@ -108,11 +94,7 @@ func Login(c *gin.Context) {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
-<<<<<<< HEAD
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
-=======
-		c.JSON(401, gin.H{"error": "Incorrect email or password"})
->>>>>>> 73d7158 (role-based authentication)
 		return
 	}
 
@@ -126,11 +108,7 @@ func Login(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signed, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-<<<<<<< HEAD
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
-=======
-		c.JSON(500, gin.H{"error": "could not create token"})
->>>>>>> 73d7158 (role-based authentication)
 		return
 	}
 

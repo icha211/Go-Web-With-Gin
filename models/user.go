@@ -9,13 +9,7 @@ type User struct {
 	Email    string `gorm:"uniqueIndex;not null" json:"email"`
 	Password string `gorm:"not null" json:"-"`
 	Name     string `json:"name"`
-<<<<<<< HEAD
-	
-	// One-to-many relation: A user can have multiple albums
-=======
-	Role     string `gorm:"default:user"` // <-- add this
 
-	// Relation one-to-many: Un utilisateur peut avoir plusieurs albums
->>>>>>> 73d7158 (role-based authentication)
+	// One-to-many relation: A user can have multiple albums
 	Albums []Album `gorm:"foreignKey:UserID" json:"albums,omitempty"`
 }

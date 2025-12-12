@@ -54,11 +54,7 @@ const CreateAlbum = () => {
   const handleCreateTag = async (e) => {
     e.preventDefault()
     if (!newTagName.trim()) {
-<<<<<<< HEAD
       setError('Tag name cannot be empty')
-=======
-      setError('The tag name cannot be empty')
->>>>>>> 73d7158 (role-based authentication)
       return
     }
 
@@ -82,11 +78,7 @@ const CreateAlbum = () => {
 
     const priceNum = parseFloat(price)
     if (isNaN(priceNum) || priceNum < 0) {
-<<<<<<< HEAD
       setError('Price must be a positive number')
-=======
-      setError('The price must be a positive number')
->>>>>>> 73d7158 (role-based authentication)
       return
     }
 
@@ -119,11 +111,7 @@ const CreateAlbum = () => {
     <div className="container">
       <div style={{ maxWidth: '600px', margin: '20px auto' }}>
         <div className="card">
-<<<<<<< HEAD
           <h2 style={{ marginBottom: '20px' }}>Create a new album</h2>
-=======
-          <h2 style={{ marginBottom: '20px' }}>Create a New Album</h2>
->>>>>>> 73d7158 (role-based authentication)
           
           <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -134,11 +122,7 @@ const CreateAlbum = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-<<<<<<< HEAD
                 placeholder="Album title"
-=======
-                placeholder="Album Title"
->>>>>>> 73d7158 (role-based authentication)
               />
             </div>
 
@@ -150,11 +134,7 @@ const CreateAlbum = () => {
                 value={artist}
                 onChange={(e) => setArtist(e.target.value)}
                 required
-<<<<<<< HEAD
                 placeholder="Artist name"
-=======
-                placeholder="Artist Name"
->>>>>>> 73d7158 (role-based authentication)
               />
             </div>
 
@@ -246,11 +226,7 @@ const CreateAlbum = () => {
                       style={{ marginTop: '10px' }}
                       onClick={() => setShowNewTagInput(true)}
                     >
-<<<<<<< HEAD
                       + Create a new tag
-=======
-                      + Create a New Tag
->>>>>>> 73d7158 (role-based authentication)
                     </button>
                   ) : (
                     <div style={{ marginTop: '10px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
@@ -299,11 +275,7 @@ const CreateAlbum = () => {
                 className="btn btn-primary"
                 disabled={loading}
               >
-<<<<<<< HEAD
                 {loading ? 'Creating...' : 'Create album'}
-=======
-                {loading ? 'Creating...' : 'Create Album'}
->>>>>>> 73d7158 (role-based authentication)
               </button>
               <button
                 type="button"

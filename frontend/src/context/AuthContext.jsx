@@ -47,11 +47,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-<<<<<<< HEAD
         error: error.response?.data?.error || 'Error during login',
-=======
-        error: error.response?.data?.error || 'Error while logging in',
->>>>>>> 73d7158 (role-based authentication)
       }
     }
   }
@@ -66,11 +62,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-<<<<<<< HEAD
         error: error.response?.data?.error || 'Error during registration',
-=======
-        error: error.response?.data?.error || 'Error while registering',
->>>>>>> 73d7158 (role-based authentication)
       }
     }
   }
