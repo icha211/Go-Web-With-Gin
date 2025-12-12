@@ -1,9 +1,0 @@
-{
-  "version": "1",
-  "name": "Test_request_gin",
-  "type": "collection",
-  "ignore": [
-    "node_modules",
-    ".git"
-  ]
-}

@@ -10,9 +10,9 @@ import (
 	"example/web-service-gin/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"github.com/golang-jwt/jwt/v4"
 )
 
 type registerBody struct {
@@ -45,7 +45,7 @@ func Register(c *gin.Context) {
 		Name:     body.Name,
 		Email:    body.Email,
 		Password: string(hashedPassword),
-		Role:     role,
+		Role:     body.Role,
 	}
 
 	if err := initializers.DB.Create(&user).Error; err != nil {
@@ -64,6 +64,7 @@ func Register(c *gin.Context) {
 			"id":    user.ID,
 			"email": user.Email,
 			"name":  user.Name,
+			"role":  user.Role, // Add this line
 		},
 		"token": token,
 	})
@@ -81,15 +82,11 @@ func Login(c *gin.Context) {
 
 	var user models.User
 	if err := initializers.DB.Where("email = ?", body.Email).First(&user).Error; err != nil {
-<<<<<<< HEAD
 		if err == gorm.ErrRecordNotFound {
 			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
 			return
 		}
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-=======
-		c.JSON(401, gin.H{"error": "Incorrect email or password"})
->>>>>>> 73d7158 (role-based authentication)
 		return
 	}
 
@@ -100,10 +97,10 @@ func Login(c *gin.Context) {
 
 	// create JWT with role
 	claims := jwt.MapClaims{
-		"sub":  user.ID,
+		"sub":   user.ID,
 		"email": user.Email,
-		"role": user.Role,
-		"exp":  time.Now().Add(24 * time.Hour).Unix(),
+		"role":  user.Role,
+		"exp":   time.Now().Add(24 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signed, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
@@ -114,7 +111,7 @@ func Login(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"token": signed,
-		"user": gin.H{"id": user.ID, "email": user.Email, "name": user.Name, "role": user.Role},
+		"user":  gin.H{"id": user.ID, "email": user.Email, "name": user.Name, "role": user.Role},
 	})
 }
 
@@ -139,5 +136,6 @@ func GetProfile(c *gin.Context) {
 		"id":    user.ID,
 		"email": user.Email,
 		"name":  user.Name,
+		"role":  user.Role, // Add this line
 	})
 }

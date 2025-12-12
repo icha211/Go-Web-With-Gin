@@ -37,7 +37,6 @@ func main() {
 		c.Next()
 	})
 
-<<<<<<< HEAD
 	// Public routes
 	router.POST("/register", controllers.Register)
 	router.POST("/login", controllers.Login)
@@ -45,38 +44,15 @@ func main() {
 	// Routes protected by authentication
 	protected := router.Group("/")
 	protected.Use(middleware.RequireAuth())
-=======
-	router.POST("/register", controllers.Register)
-	router.POST("/login", controllers.Login)
-
-	api := router.Group("/api")
-	api.Use(middleware.Authenticate())
->>>>>>> 73d7158 (role-based authentication)
 	{
-		api.GET("/albums", controllers.GetAlbums)
-		api.GET("/albums/:id", controllers.GetAlbumByID)
-		api.POST("/albums", controllers.PostAlbums)
-		api.GET("/profile", controllers.GetProfile)
+		protected.GET("/albums", controllers.GetAlbums)
+		protected.GET("/albums/:id", controllers.GetAlbumByID)
+		protected.POST("/albums", controllers.PostAlbums)
+		protected.GET("/profile", controllers.GetProfile)
 
-<<<<<<< HEAD
 		// Tag routes
 		protected.GET("/tags", controllers.GetTags)
 		protected.POST("/tags", controllers.CreateTag)
-=======
-		// Routes pour les tags
-		api.GET("/tags", controllers.GetTags)
-		api.POST("/tags", controllers.CreateTag)
-
-		// Route protégée pour la création d'album
-		api.POST("/albums", controllers.PostAlbums) // use existing handler (or implement controllers.CreateAlbum)// protected route
-
-		// Pour les artistes uniquement
-		artist := api.Group("/artist")
-		artist.Use(middleware.RequireRole("artist"))
-		{
-			artist.POST("/albums/upload", controllers.PostAlbums)
-		}
->>>>>>> 73d7158 (role-based authentication)
 	}
 
 	// serve built frontend if present (adjust path for your frontend build)

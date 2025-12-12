@@ -1,0 +1,666 @@
+{
+  "info": {
+    "_postman_id": "gin-api-collection-2025",
+    "name": "Go Web with Gin - Complete API Collection",
+    "description": "Complete API test collection converted from Bruno for Go-Web-with-Gin project.\n\n**Usage:**\n1. Import this collection\n2. Import an environment (Local or Production)\n3. Select the environment from top-right dropdown\n4. Run 'Register' or 'Login' first to get authToken\n5. Token is auto-saved and used in other requests\n\n**Folder Structure:**\n- Auth: Registration, login, profile endpoints\n- Albums: CRUD operations for albums",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Authentication and user management endpoints",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 201",
+                  "pm.test(\"Status code is 201\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: Response contains user and token",
+                  "pm.test(\"Response contains user and token\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('user');",
+                  "    pm.expect(body).to.have.property('token');",
+                  "});",
+                  "",
+                  "// Test: User object has required fields",
+                  "pm.test(\"User object has required fields\", function() {",
+                  "    const user = pm.response.json().user;",
+                  "    pm.expect(user).to.have.property('id');",
+                  "    pm.expect(user).to.have.property('email');",
+                  "    pm.expect(user.email).to.equal('test@example.com');",
+                  "});",
+                  "",
+                  "// Test: Token is a string",
+                  "pm.test(\"Token is a string\", function() {",
+                  "    const token = pm.response.json().token;",
+                  "    pm.expect(token).to.be.a('string');",
+                  "    pm.expect(token.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "// Test: Password is not in response",
+                  "pm.test(\"Password is not in response\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.user).to.not.have.property('password');",
+                  "});",
+                  "",
+                  "// Auto-save token and userId to collection variables",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', responseJson.token);",
+                  "    pm.collectionVariables.set('userId', responseJson.user.id);",
+                  "    console.log('✅ Token saved to collection variables');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Test User\",\n  \"role\": \"user\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new user account. Returns user object and JWT token.\n\n**Body Parameters:**\n- email: User's email address\n- password: User's password\n- name: User's display name\n- role: User role (user/artist/admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 200",
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: Response contains user and token",
+                  "pm.test(\"Response contains user and token\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('user');",
+                  "    pm.expect(body).to.have.property('token');",
+                  "});",
+                  "",
+                  "// Test: User object has required fields",
+                  "pm.test(\"User object has required fields\", function() {",
+                  "    const user = pm.response.json().user;",
+                  "    pm.expect(user).to.have.property('id');",
+                  "    pm.expect(user).to.have.property('email');",
+                  "    pm.expect(user.email).to.equal('test@example.com');",
+                  "});",
+                  "",
+                  "// Test: Token is a string",
+                  "pm.test(\"Token is a string\", function() {",
+                  "    const token = pm.response.json().token;",
+                  "    pm.expect(token).to.be.a('string');",
+                  "    pm.expect(token.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "// Test: Password is not in response",
+                  "pm.test(\"Password is not in response\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.user).to.not.have.property('password');",
+                  "});",
+                  "",
+                  "// Auto-save token and userId to collection variables",
+                  "if (pm.response.code === 200) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', responseJson.token);",
+                  "    pm.collectionVariables.set('userId', responseJson.user.id);",
+                  "    console.log('✅ Token saved to collection variables');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            },
+            "description": "Login with existing credentials. Returns user object and JWT token.\n\n**Body Parameters:**\n- email: User's email address\n- password: User's password"
+          },
+          "response": []
+        },
+        {
+          "name": "Login Invalid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 401",
+                  "pm.test(\"Status code is 401\", function() {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "// Test: Response contains error message",
+                  "pm.test(\"Response contains error message\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"wrongpassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            },
+            "description": "Test login with invalid credentials. Should return 401 error."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 200",
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: User object has required fields",
+                  "pm.test(\"User object has required fields\", function() {",
+                  "    const user = pm.response.json();",
+                  "    pm.expect(user).to.have.property('id');",
+                  "    pm.expect(user).to.have.property('email');",
+                  "    pm.expect(user).to.have.property('name');",
+                  "});",
+                  "",
+                  "// Test: Password is not in response",
+                  "pm.test(\"Password is not in response\", function() {",
+                  "    const user = pm.response.json();",
+                  "    pm.expect(user).to.not.have.property('password');",
+                  "});",
+                  "",
+                  "// Test: Email matches registered user",
+                  "pm.test(\"Email matches registered user\", function() {",
+                  "    const user = pm.response.json();",
+                  "    pm.expect(user.email).to.equal('test@example.com');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile"]
+            },
+            "description": "Get authenticated user's profile. Requires valid JWT token.\n\n**Authentication:** Bearer Token (automatically uses {{authToken}} variable)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile Unauthorized",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 401",
+                  "pm.test(\"Status code is 401\", function() {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "// Test: Response contains error message",
+                  "pm.test(\"Response contains error message\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile"]
+            },
+            "description": "Test profile access without authentication. Should return 401 error."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Albums",
+      "description": "Album CRUD operations",
+      "item": [
+        {
+          "name": "Get All Albums",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 200",
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Test: Response is an array",
+                  "pm.test(\"Response is an array\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "// Test: Response contains at least 3 albums",
+                  "pm.test(\"Response contains at least 3 albums\", function() {",
+                  "    pm.expect(pm.response.json().length).to.be.at.least(3);",
+                  "});",
+                  "",
+                  "// Test: Each album has required fields",
+                  "pm.test(\"Each album has required fields\", function() {",
+                  "    const albums = pm.response.json();",
+                  "    albums.forEach(album => {",
+                  "        pm.expect(album).to.have.property('id');",
+                  "        pm.expect(album).to.have.property('title');",
+                  "        pm.expect(album).to.have.property('artist');",
+                  "        pm.expect(album).to.have.property('price');",
+                  "    });",
+                  "});",
+                  "",
+                  "// Test: First album is Blue Train",
+                  "pm.test(\"First album is Blue Train\", function() {",
+                  "    const albums = pm.response.json();",
+                  "    const firstAlbum = albums.find(album => album.id === '1');",
+                  "    pm.expect(firstAlbum).to.exist;",
+                  "    pm.expect(firstAlbum.title).to.equal('Blue Train');",
+                  "    pm.expect(firstAlbum.artist).to.equal('John Coltrane');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/albums",
+              "host": ["{{baseUrl}}"],
+              "path": ["albums"]
+            },
+            "description": "Get all albums. Requires authentication.\n\n**Authentication:** Bearer Token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Album By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 200",
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: Album has correct ID",
+                  "pm.test(\"Album has correct ID\", function() {",
+                  "    pm.expect(pm.response.json().id).to.equal('1');",
+                  "});",
+                  "",
+                  "// Test: Album has all required fields",
+                  "pm.test(\"Album has all required fields\", function() {",
+                  "    const album = pm.response.json();",
+                  "    pm.expect(album).to.have.property('id');",
+                  "    pm.expect(album).to.have.property('title');",
+                  "    pm.expect(album).to.have.property('artist');",
+                  "    pm.expect(album).to.have.property('price');",
+                  "});",
+                  "",
+                  "// Test: Album is Blue Train by John Coltrane",
+                  "pm.test(\"Album is Blue Train by John Coltrane\", function() {",
+                  "    const album = pm.response.json();",
+                  "    pm.expect(album.title).to.equal('Blue Train');",
+                  "    pm.expect(album.artist).to.equal('John Coltrane');",
+                  "    pm.expect(album.price).to.equal(56.99);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/albums/{{albumId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["albums", "{{albumId}}"]
+            },
+            "description": "Get a specific album by ID. Requires authentication.\n\n**Path Parameters:**\n- albumId: Album ID (default: 1)\n\n**Authentication:** Bearer Token"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Album",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 201",
+                  "pm.test(\"Status code is 201\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: Created album has correct data",
+                  "pm.test(\"Created album has correct data\", function() {",
+                  "    const album = pm.response.json();",
+                  "    pm.expect(album.id).to.exist;",
+                  "    pm.expect(album.id).to.be.a('number');",
+                  "    pm.expect(album.title).to.equal('Kind of Blue');",
+                  "    pm.expect(album.artist).to.equal('Miles Davis');",
+                  "    pm.expect(album.price).to.equal(45.99);",
+                  "});",
+                  "",
+                  "// Test: Album has all required fields",
+                  "pm.test(\"Album has all required fields\", function() {",
+                  "    const album = pm.response.json();",
+                  "    pm.expect(album).to.have.property('id');",
+                  "    pm.expect(album).to.have.property('title');",
+                  "    pm.expect(album).to.have.property('artist');",
+                  "    pm.expect(album).to.have.property('price');",
+                  "});",
+                  "",
+                  "// Test: Response content type is JSON",
+                  "pm.test(\"Response content type is JSON\", function() {",
+                  "    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Kind of Blue\",\n  \"artist\": \"Miles Davis\",\n  \"price\": 45.99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/albums",
+              "host": ["{{baseUrl}}"],
+              "path": ["albums"]
+            },
+            "description": "Create a new album. Requires authentication.\n\n**Body Parameters:**\n- title: Album title\n- artist: Artist name\n- price: Album price\n\n**Authentication:** Bearer Token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Albums Unauthorized",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 401",
+                  "pm.test(\"Status code is 401\", function() {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "// Test: Response contains error message",
+                  "pm.test(\"Response contains error message\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/albums",
+              "host": ["{{baseUrl}}"],
+              "path": ["albums"]
+            },
+            "description": "Test albums access without authentication. Should return 401 error."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "albumId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
