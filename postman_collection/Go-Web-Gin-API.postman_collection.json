@@ -100,6 +100,103 @@
           "response": []
         },
         {
+          "name": "Register Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test: Status code is 201",
+                  "pm.test(\"Status code is 201\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "// Test: Response is an object",
+                  "pm.test(\"Response is an object\", function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('object');",
+                  "});",
+                  "",
+                  "// Test: Response contains user and token",
+                  "pm.test(\"Response contains user and token\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('user');",
+                  "    pm.expect(body).to.have.property('token');",
+                  "});",
+                  "",
+                  "// Test: User object has required fields",
+                  "pm.test(\"User object has required fields\", function() {",
+                  "    const user = pm.response.json().user;",
+                  "    pm.expect(user).to.have.property('id');",
+                  "    pm.expect(user).to.have.property('email');",
+                  "    pm.expect(user.email).to.equal('admin@example.com');",
+                  "});",
+                  "",
+                  "// Test: User role is admin",
+                  "pm.test(\"User role is admin\", function() {",
+                  "    const user = pm.response.json().user;",
+                  "    pm.expect(user).to.have.property('role');",
+                  "    pm.expect(user.role).to.equal('admin');",
+                  "});",
+                  "",
+                  "// Test: Token is a string",
+                  "pm.test(\"Token is a string\", function() {",
+                  "    const token = pm.response.json().token;",
+                  "    pm.expect(token).to.be.a('string');",
+                  "    pm.expect(token.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "// Test: Password is not in response",
+                  "pm.test(\"Password is not in response\", function() {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.user).to.not.have.property('password');",
+                  "});",
+                  "",
+                  "// Auto-save admin token to collection variables",
+                  "if (pm.response.code === 201) {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', responseJson.token);",
+                  "    pm.collectionVariables.set('userId', responseJson.user.id);",
+                  "    pm.collectionVariables.set('adminToken', responseJson.token);",
+                  "    console.log('✅ Admin token saved to collection variables');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\",\n  \"name\": \"Admin User\",\n  \"role\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new admin user account. Returns user object and JWT token.\n\n**Body Parameters:**\n- email: admin@example.com\n- password: admin123\n- name: Admin User\n- role: admin"
+          },
+          "response": []
+        },
+        {
           "name": "Login",
           "event": [
             {
@@ -649,6 +746,11 @@
     },
     {
       "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
       "value": "",
       "type": "string"
     },

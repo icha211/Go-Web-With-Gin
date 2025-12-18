@@ -50,6 +50,7 @@ func PostAlbums(c *gin.Context) {
 		Title  string  `json:"title"`
 		Artist string  `json:"artist"`
 		Price  float64 `json:"price"`
+		Cover  string  `json:"cover"`
 		TagIDs []uint  `json:"tag_ids"`
 	}
 
@@ -63,6 +64,7 @@ func PostAlbums(c *gin.Context) {
 		Title:  albumInput.Title,
 		Artist: albumInput.Artist,
 		Price:  albumInput.Price,
+		Cover:  albumInput.Cover,
 		UserID: &userIDUint,
 	}
 
@@ -85,4 +87,113 @@ func PostAlbums(c *gin.Context) {
 	initializers.DB.Preload("User").Preload("Tags").First(&newAlbum, newAlbum.ID)
 
 	c.IndentedJSON(http.StatusCreated, newAlbum)
+}
+
+// UpdateAlbum updates an existing album
+// Users can only update their own albums, admins can update any album
+func UpdateAlbum(c *gin.Context) {
+	id := c.Param("id")
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
+	userRole, _ := c.Get("role")
+
+	var album models.Album
+	if err := initializers.DB.First(&album, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"error": "Album not found"})
+			return
+		}
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Check authorization: user must own the album OR be an admin
+	userIDUint := userID.(uint)
+	if album.UserID != nil && *album.UserID != userIDUint && userRole != "admin" {
+		c.IndentedJSON(http.StatusForbidden, gin.H{"error": "You don't have permission to update this album"})
+		return
+	}
+
+	var albumInput struct {
+		Title  string  `json:"title"`
+		Artist string  `json:"artist"`
+		Price  float64 `json:"price"`
+		Cover  string  `json:"cover"`
+		TagIDs []uint  `json:"tag_ids"`
+	}
+
+	if err := c.BindJSON(&albumInput); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Update album fields
+	album.Title = albumInput.Title
+	album.Artist = albumInput.Artist
+	album.Price = albumInput.Price
+	album.Cover = albumInput.Cover
+
+	// Update tags if provided
+	if len(albumInput.TagIDs) > 0 {
+		var tags []models.Tag
+		if err := initializers.DB.Where("id IN ?", albumInput.TagIDs).Find(&tags).Error; err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving tags"})
+			return
+		}
+		// Clear existing associations and set new ones
+		initializers.DB.Model(&album).Association("Tags").Clear()
+		album.Tags = tags
+	}
+
+	if err := initializers.DB.Save(&album).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Reload with relations for the response
+	initializers.DB.Preload("User").Preload("Tags").First(&album, album.ID)
+
+	c.IndentedJSON(http.StatusOK, album)
+}
+
+// DeleteAlbum deletes an album
+// Users can only delete their own albums, admins can delete any album
+func DeleteAlbum(c *gin.Context) {
+	id := c.Param("id")
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
+	userRole, _ := c.Get("role")
+
+	var album models.Album
+	if err := initializers.DB.First(&album, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"error": "Album not found"})
+			return
+		}
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Check authorization: user must own the album OR be an admin
+	userIDUint := userID.(uint)
+	if album.UserID != nil && *album.UserID != userIDUint && userRole != "admin" {
+		c.IndentedJSON(http.StatusForbidden, gin.H{"error": "You don't have permission to delete this album"})
+		return
+	}
+
+	// Delete the album (GORM will handle the many-to-many associations)
+	if err := initializers.DB.Delete(&album).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Album deleted successfully"})
 }

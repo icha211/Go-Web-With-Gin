@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"example/web-service-gin/controllers"
 	"example/web-service-gin/initializers"
 	"example/web-service-gin/middleware"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,6 +49,8 @@ func main() {
 		protected.GET("/albums", controllers.GetAlbums)
 		protected.GET("/albums/:id", controllers.GetAlbumByID)
 		protected.POST("/albums", controllers.PostAlbums)
+		protected.PUT("/albums/:id", controllers.UpdateAlbum)
+		protected.DELETE("/albums/:id", controllers.DeleteAlbum)
 		protected.GET("/profile", controllers.GetProfile)
 
 		// Tag routes

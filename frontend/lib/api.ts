@@ -30,19 +30,21 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      window.location.href = '/login'
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }
 )
 
 export const authAPI = {
-  register: async (email, password, name) => {
-    const response = await api.post('/register', { email, password, name })
+  register: async (email: string, password: string, name: string, role: string = 'user') => {
+    const response = await api.post('/register', { email, password, name, role })
     return response.data
   },
 
-  login: async (email, password) => {
+  login: async (email: string, password: string) => {
     const response = await api.post('/login', { email, password })
     return response.data
   },
@@ -59,13 +61,23 @@ export const albumsAPI = {
     return response.data
   },
 
-  getById: async (id) => {
+  getById: async (id: string | number) => {
     const response = await api.get(`/albums/${id}`)
     return response.data
   },
 
-  create: async (albumData) => {
+  create: async (albumData: any) => {
     const response = await api.post('/albums', albumData)
+    return response.data
+  },
+
+  update: async (id: string | number, albumData: any) => {
+    const response = await api.put(`/albums/${id}`, albumData)
+    return response.data
+  },
+
+  delete: async (id: string | number) => {
+    const response = await api.delete(`/albums/${id}`)
     return response.data
   },
 }
@@ -76,11 +88,10 @@ export const tagsAPI = {
     return response.data
   },
 
-  create: async (name) => {
+  create: async (name: string) => {
     const response = await api.post('/tags', { name })
     return response.data
   },
 }
 
 export default api
-

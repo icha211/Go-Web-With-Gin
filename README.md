@@ -1,6 +1,24 @@
-# RESTful API with Go and Gin
+# Framework Programming 2025
+
+Group 14:
+Khairunnnisa Rahmahdani Danang 5025231081
+
+## Overview
+
+**RESTful API with Go and Gin**
 
 This project is a RESTful API built with Go and the Gin framework to manage a music album collection with JWT authentication.
+
+## Models
+
+User: represents an application user.
+Typical fields: id, username, password, role (user | admin), created_at.
+
+Album: the library's album inventory item.
+Typical fields: id, title, artist, price, user_id, user, tags
+
+Tag: album tags
+Typical fields: id, name, album
 
 ## Features
 

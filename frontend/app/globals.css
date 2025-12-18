@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-plus-jakarta: 'Plus Jakarta Sans', sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,12 +15,12 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background-color: #dbeafe;
   color: #333;
 }
 
@@ -61,6 +71,13 @@ code {
   background-color: #c82333;
 }
 
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -90,87 +107,45 @@ code {
 
 .error {
   color: #dc3545;
-  margin-top: 5px;
-  font-size: 14px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
 }
 
 .success {
-  color: #28a745;
-  margin-top: 5px;
-  font-size: 14px;
-}
-
-.card {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-  background: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header h1 {
-  color: #007bff;
-}
-
-.nav {
-  display: flex;
-  gap: 15px;
-}
-
-.nav a {
-  text-decoration: none;
-  color: #333;
-  padding: 8px 15px;
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
   border-radius: 5px;
-  transition: background-color 0.3s;
+  margin: 10px 0;
 }
 
-.nav a:hover {
-  background-color: #f0f0f0;
-}
-
-.nav a.active {
-  background-color: #007bff;
-  color: white;
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
+  margin-top: 20px;
 }
 
 .album-card {
   background: white;
-  border-radius: 8px;
   padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: box-shadow 0.3s;
 }
 
 .album-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.album-card h3 {
-  color: #007bff;
-  margin-bottom: 10px;
-}
-
-.album-card p {
-  margin: 5px 0;
-  color: #666;
 }
 
 .tags {
@@ -181,17 +156,35 @@ code {
 }
 
 .tag {
-  background-color: #e9ecef;
+  background-color: #007bff;
+  color: white;
   padding: 5px 10px;
   border-radius: 15px;
   font-size: 12px;
-  color: #495057;
 }
 
-.loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: #666;
+.header {
+  background: white;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}

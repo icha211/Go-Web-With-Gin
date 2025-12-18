@@ -1,16 +1,13 @@
-package controllers
+﻿package controllers
 
 import (
 	"net/http"
-	"os"
-	"time"
 
 	"example/web-service-gin/initializers"
 	"example/web-service-gin/models"
 	"example/web-service-gin/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -95,15 +92,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// create JWT with role
-	claims := jwt.MapClaims{
-		"sub":   user.ID,
-		"email": user.Email,
-		"role":  user.Role,
-		"exp":   time.Now().Add(24 * time.Hour).Unix(),
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signed, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	// issue token using the same helper used by RequireAuth validator
+	signed, err := utils.GenerateToken(user.ID, user.Email)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
 		return

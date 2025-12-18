@@ -10,10 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// GetTags retrieves all available tags
+// GetTags retrieves all available tags with associated albums
 func GetTags(c *gin.Context) {
 	var tags []models.Tag
-	if err := initializers.DB.Find(&tags).Error; err != nil {
+	if err := initializers.DB.Preload("Albums").Find(&tags).Error; err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -52,4 +52,3 @@ func CreateTag(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusCreated, newTag)
 }
-
