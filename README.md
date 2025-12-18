@@ -2,7 +2,8 @@
 
 **A modern full-stack music album management application built with Go, Gin, and React**
 
-**Team:** Group 14 - Khairunnnisa Rahmahdani Danang (5025231081)
+**Team:** Group 14 - Khairunnnisa Rahmahdani Danang (5025231081) & Gabin Joussot-Dubien
+
 
 ---
 
@@ -410,6 +411,7 @@ This project is part of Framework Programming 2025 course work.
 
 **Khairunnnisa Rahmahdani Danang**  
 Student ID: 5025231081  
+**Gabin Joussot-Dubien**
 Group: 14
 
 ---
