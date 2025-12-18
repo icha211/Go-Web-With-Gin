@@ -29,7 +29,7 @@ export default function Shell({ title, description, searchPlaceholder, children,
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-100 via-purple-100 to-gray-100">
+    <div className="min-h-screen">
       <div className="flex h-full">
         {/* Sidebar */}
         <aside className="w-64 bg-white/70 backdrop-blur-md border-r border-white/40 shadow-sm p-6 flex flex-col gap-6">

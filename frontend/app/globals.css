@@ -14,13 +14,21 @@
   box-sizing: border-box;
 }
 
+html {
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/007/000/559/original/blue-gradient-motion-graphic-background-free-video.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
 body {
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #dbeafe;
+  background: transparent;
+  min-height: 100vh;
   color: #333;
 }
 
