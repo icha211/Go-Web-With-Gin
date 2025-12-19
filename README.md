@@ -382,25 +382,6 @@ An **Album** can have multiple **Tags**, and a **Tag** can be associated with mu
 
 ---
 
-## 🐛 Troubleshooting
-
-### Backend won't start
-- Check if port 8082 is already in use
-- Ensure Go is properly installed: `go version`
-- Try: `go mod tidy` before running
-
-### Frontend won't connect to API
-- Ensure backend is running on `http://localhost:8082`
-- Check CORS configuration in main.go
-- Clear browser cache and localStorage
-
-### Database errors
-- Delete `albums.db` to reset database
-- Ensure SQLite3 is installed
-- Check database file permissions
-
----
-
 ## 📄 License
 
 This project is part of Framework Programming 2025 course work.
